@@ -12,6 +12,7 @@
         android:layout_height="match_parent"
         android:layout_weight=".70"
         android:gravity="center"
+        android:textColor="@android:color/white"
         android:text="@string/default_text"
         android:textSize="@dimen/abc_text_size_small_material"
         android:textStyle="bold"/>
@@ -21,6 +22,6 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="0.30"
-        android:text="Refresh"/>
+        android:text="@string/refresh"/>
 
 </LinearLayout>

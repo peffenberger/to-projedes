@@ -26,13 +26,11 @@ public class ProjedesWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        final int count = appWidgetIds.length;
 
-        for (int i = 0; i < count; i++) {
-            int widgetId = appWidgetIds[i];
-
+        for (int widgetId : appWidgetIds) {
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
                     R.layout.simple_widget);
+
             Intent intent = new Intent(context, ProjedesWidgetProvider.class);
             intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
@@ -40,15 +38,13 @@ public class ProjedesWidgetProvider extends AppWidgetProvider {
                     0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             remoteViews.setOnClickPendingIntent(R.id.actionButton, pendingIntent);
 
-            String url = "https://rodos.vsb.cz/Handlers/RoadSegments.ashx?lang=cs&road=D11";
-
+            // https://rodos.vsb.cz/Handlers/RoadSegments.ashx?aggregate=true&lang=cs&road=D11
+            String url = "https://rodos.vsb.cz/Handlers/RoadSegments.ashx?aggregate=true&lang=cs&road=D11";
             new RetrieveFeedTask(remoteViews, widgetId, appWidgetManager).execute(url);
         }
     }
 
-    private class RetrieveFeedTask extends AsyncTask<String, Void, String> {
-
-        private Exception exception;
+    private static class RetrieveFeedTask extends AsyncTask<String, Void, String> {
 
         private RemoteViews remoteViews;
 
@@ -81,7 +77,6 @@ public class ProjedesWidgetProvider extends AppWidgetProvider {
                 return sb.toString();
             } catch (Exception e) {
                 e.printStackTrace();
-                this.exception = e;
                 return "Error " + e.getMessage();
             }
         }
@@ -94,7 +89,7 @@ public class ProjedesWidgetProvider extends AppWidgetProvider {
         }
     }
 
-    private List<String> parseData(InputStream stream) throws XmlPullParserException, IOException {
+    public static List<String> parseData(InputStream stream) throws XmlPullParserException, IOException {
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
         factory.setNamespaceAware(true);
         XmlPullParser xpp = factory.newPullParser();
@@ -121,7 +116,7 @@ public class ProjedesWidgetProvider extends AppWidgetProvider {
     }
 
 
-    private List<String> downloadUrl(URL url) throws IOException {
+    private static List<String> downloadUrl(URL url) throws IOException {
         InputStream stream = null;
         HttpsURLConnection connection = null;
         List<String> delays = null;
@@ -143,10 +138,8 @@ public class ProjedesWidgetProvider extends AppWidgetProvider {
             // Retrieve the response body as an InputStream.
             stream = connection.getInputStream();
             Log.d("test", "Preparing to parse");
-            if (stream != null) {
-                // Converts Stream to String with max length of 500.
-                delays = parseData(stream);
-            }
+            // Converts Stream to String with max length of 500.
+            if (stream != null) delays = parseData(stream);
             Log.d("test", "Parsing completed");
         } catch (XmlPullParserException e) {
             e.printStackTrace();
@@ -162,7 +155,7 @@ public class ProjedesWidgetProvider extends AppWidgetProvider {
         return delays;
     }
 
-    private void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
+    private static void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
         if (parser.getEventType() != XmlPullParser.START_TAG) {
             throw new IllegalStateException();
         }
