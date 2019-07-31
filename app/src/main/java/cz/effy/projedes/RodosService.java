@@ -70,8 +70,8 @@ public class RodosService {
         List<String> delays = null;
         try {
             connection = (HttpURLConnection) url.openConnection();
-            connection.setReadTimeout(15000);
-            connection.setConnectTimeout(15000);
+            connection.setReadTimeout(45000);
+            connection.setConnectTimeout(45000);
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml");
             connection.setRequestProperty("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:68.0) Gecko/20100101 Firefox/68.0");
