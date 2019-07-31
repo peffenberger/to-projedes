@@ -25,7 +25,10 @@ public class ProjedesWidgetProvider extends AppWidgetProvider {
                     0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             remoteViews.setOnClickPendingIntent(R.id.actionButton, pendingIntent);
 
-            new RetrieveFeedTask(remoteViews, widgetId, appWidgetManager).execute("D11");
+            String titlePrefix = ExampleAppWidgetConfigure.loadTitlePref(context, widgetId);
+
+            remoteViews.setTextViewText(R.id.roadView, titlePrefix);
+            new RetrieveFeedTask(remoteViews, widgetId, appWidgetManager).execute(titlePrefix);
         }
     }
 

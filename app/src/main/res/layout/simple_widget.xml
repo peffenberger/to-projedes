@@ -3,25 +3,35 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:minHeight="30dp"
+    android:minWidth="250dp"
     android:padding="@dimen/widget_margin"
     android:background="#55000000">
 
     <TextView
+        android:id="@+id/roadView"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight=".15"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/abc_text_size_small_material"
+        android:textStyle="bold"/>
+    <TextView
         android:id="@+id/textView"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight=".70"
+        android:layout_weight=".65"
         android:gravity="center"
         android:textColor="@android:color/white"
         android:text="@string/default_text"
         android:textSize="@dimen/abc_text_size_small_material"
         android:textStyle="bold"/>
-
     <Button
         android:id="@+id/actionButton"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.30"
+        android:layout_weight="0.20"
         android:text="@string/refresh"/>
 
 </LinearLayout>
