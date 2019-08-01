@@ -5,6 +5,8 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -13,8 +15,13 @@ public class ProjedesWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        Log.d("test", "updating...");
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo nInfo = cm.getActiveNetworkInfo();
+        boolean connected = nInfo != null && nInfo.isAvailable() && nInfo.isConnected();
 
         for (int widgetId : appWidgetIds) {
+            Log.d("test", "updating... remoteId " + widgetId);
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
                     R.layout.simple_widget);
 
@@ -28,7 +35,12 @@ public class ProjedesWidgetProvider extends AppWidgetProvider {
             String titlePrefix = ExampleAppWidgetConfigure.loadTitlePref(context, widgetId);
 
             remoteViews.setTextViewText(R.id.roadView, titlePrefix);
-            new RetrieveFeedTask(remoteViews, widgetId, appWidgetManager).execute(titlePrefix);
+
+            if (connected) {
+                new RetrieveFeedTask(remoteViews, widgetId, appWidgetManager).execute(titlePrefix);
+            } else {
+                remoteViews.setTextViewText(R.id.textView, "No network");
+            }
         }
     }
 
