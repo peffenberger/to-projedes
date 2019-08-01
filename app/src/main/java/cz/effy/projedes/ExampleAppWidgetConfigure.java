@@ -81,7 +81,7 @@ public class ExampleAppWidgetConfigure extends Activity {
         if (prefix != null) {
             return prefix;
         } else {
-            return context.getString(R.string.appwidget_prefix_default);
+            return "D10";
         }
     }
 }

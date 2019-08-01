@@ -33,6 +33,12 @@ public class ProjedesWidgetProvider extends AppWidgetProvider {
             remoteViews.setOnClickPendingIntent(R.id.actionButton, pendingIntent);
 
             String titlePrefix = ExampleAppWidgetConfigure.loadTitlePref(context, widgetId);
+            Log.d("test", "titlePrefix... " + titlePrefix);
+            if (titlePrefix == null) {
+                remoteViews.setTextViewText(R.id.roadView, "n/a");
+                remoteViews.setTextViewText(R.id.textView, "No road");
+                break;
+            }
 
             remoteViews.setTextViewText(R.id.roadView, titlePrefix);
 
