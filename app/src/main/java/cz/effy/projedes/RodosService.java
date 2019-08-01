@@ -16,9 +16,10 @@ import java.util.List;
 
 public class RodosService {
 
-    final static String BASE_URL = "https://rodos.vsb.cz/Handlers/RoadSegments.ashx?aggregate=true&lang=cs&road=";
+    private final static int TIMEOUT = 60000;
+    private final static String BASE_URL = "https://rodos.vsb.cz/Handlers/RoadSegments.ashx?aggregate=true&lang=cs&road=";
 
-    public static String downloadState(String road) {
+    static String downloadState(String road) {
         try {
             URL url = new URL(BASE_URL + road);
             List<String> delays = null;
@@ -70,8 +71,8 @@ public class RodosService {
         List<String> delays = null;
         try {
             connection = (HttpURLConnection) url.openConnection();
-            connection.setReadTimeout(45000);
-            connection.setConnectTimeout(45000);
+            connection.setReadTimeout(TIMEOUT);
+            connection.setConnectTimeout(TIMEOUT);
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml");
             connection.setRequestProperty("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:68.0) Gecko/20100101 Firefox/68.0");
