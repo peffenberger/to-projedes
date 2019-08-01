@@ -1,8 +1,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">ProjedesWidget</string>
     <string name="default_text">Nejsou data</string>
-    <string name="refresh">Refresh</string>
-    <string name="appwidget_configure_instructions">Vyerte silnici</string>
+    <string name="refresh">R</string>
+    <string name="appwidget_configure_instructions">Vyberte silnici</string>
     <string name="appwidget_prefix_default">D11</string>
     <string name="road_prompt">Vyberte silnici</string>
     <string-array name="road_arrays">
