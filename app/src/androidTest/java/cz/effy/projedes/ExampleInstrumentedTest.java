@@ -33,17 +33,12 @@ public class ExampleInstrumentedTest {
     public void useAppContext() throws Exception {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
-        Context appContext2 = InstrumentationRegistry.getContext();
 
         assertEquals("cz.effy.rodos", appContext.getPackageName());
 
         Log.d("test", "jedeme");
 
-//        InputStream stream = appContext.getResources().openRawResource(cz.effy.rodos.test.R.raw.road_segments);
-
-//        InputStream stream = appContext2.getAssets().open("RoadSegments.ashx.svg");
-
-        String url = "https://rodos.vsb.cz/Handlers/RoadSegments.ashx?lang=cs&road=D11";
+        String url = "https://rodos.vsb.cz/Handlers/RoadSegments.ashx?aggregate=true&lang=cs&road=D11_PRH_HK";
 
         List<String> delays = downloadUrl(new URL(url));
         Log.d("test", "Zpozdeni " + delays.toString());
@@ -53,36 +48,45 @@ public class ExampleInstrumentedTest {
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
         factory.setNamespaceAware(true);
         XmlPullParser xpp = factory.newPullParser();
-
         xpp.setInput(new InputStreamReader(stream));
         int eventType = xpp.getEventType();
         List<String> delays = new ArrayList<>();
+        List<String> colors = new ArrayList<>();
         while (eventType != XmlPullParser.END_DOCUMENT) {
             String name = xpp.getName();
             if (eventType == XmlPullParser.START_DOCUMENT) {
-//                Log.d("test", "Start document");
             } else if (eventType == XmlPullParser.START_TAG) {
-//                Log.d("test", "Start tag " + xpp.getName());
+
+//                Log.d("test", name);
                 if ("defs".equals(name)) {
                     skip(xpp);
                 }
-//            } else if (eventType == XmlPullParser.END_TAG) {
-//                Log.d("test", "End tag " + xpp.getName());
+                if ("rect".equals(name)){
+                    String id = xpp.getAttributeValue(null, "id");
+                    if (id != null && id.startsWith("SegmentViewMerge")) {
+                        String style = xpp.getAttributeValue(null, "style");
+                        if (style != null && style.startsWith("fill:#")) {
+                            colors.add(style.substring(6, 12));
+                        }
+                    }
+                }
+
             } else if (eventType == XmlPullParser.TEXT) {
                 String text = xpp.getText();
-                if (!text.trim().isEmpty())
-//                    Log.d("test", "Text " + text);
+
+                if (!text.trim().isEmpty()) {
+
                     if (text.startsWith("zpo")) {
                         delays.add(text);
                     }
+                }
             }
             eventType = xpp.next();
         }
-//        Log.d("test", "End document");
-//        Log.d("test", "Zpozdeni " + delays.toString());
+
+        Log.d("test", "woo hooo " + colors.size());
         return delays;
     }
-
 
     private List<String> downloadUrl(URL url) throws IOException {
         InputStream stream = null;

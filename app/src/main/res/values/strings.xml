@@ -6,20 +6,14 @@
     <string name="appwidget_prefix_default">D11</string>
     <string name="road_prompt">Vyberte silnici</string>
     <string-array name="road_arrays">
-        <item>D11</item>
-        <item>R10</item>
-        <item>R7</item>
-        <item>R35_1</item>
-        <item>R35_2</item>
-        <item>D1_1</item>
-        <item>D1_2</item>
-        <item>D2</item>
-        <item>D3</item>
-        <item>D5</item>
-        <item>D8_1</item>
-        <item>D8_2</item>
-        <item>D0</item>
-        <item>R4</item>
-        <item>R6</item>
+        <item>D11_PRH_HK</item>
+        <item>D10_PRH_TRN</item>
+        <item>D8_PRH_UST</item>
+        <item>D5_PRH_RZVDE</item>
+        <item>D1_1_PRH_HLN</item>
+        <item>D1_2_PRV_BHM</item>
+        <item>D0_2_PRHMOD_PRHLIP</item>
+        <item>D0_1_PRHSAT_PRHBECH</item>
+        <item>D35_MHL_LPN</item>
     </string-array>
 </resources>

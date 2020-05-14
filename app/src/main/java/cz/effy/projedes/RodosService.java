@@ -12,34 +12,31 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import cz.effy.projedes.dto.RoadState;
 
 public class RodosService {
 
     private final static int TIMEOUT = 60000;
     private final static String BASE_URL = "https://rodos.vsb.cz/Handlers/RoadSegments.ashx?aggregate=true&lang=cs&road=";
 
-    static String downloadState(String road) {
+    static RoadState downloadState(String road) {
         try {
             URL url = new URL(BASE_URL + road);
-            List<String> delays = null;
+            RoadState delays = null;
             Log.d("test", "Preparing download " + url.toString());
             delays = downloadUrl(url);
-            Log.d("test", "Download completed " + (delays != null ? delays.toString() : "null"));
-            StringBuilder sb = new StringBuilder();
-            if (delays != null && delays.size() == 2) {
-                sb.append(delays.get(0));
-                sb.append("\n");
-                sb.append(delays.get(1));
-            }
-            return sb.toString();
+            Log.d("test", "Download completed ");
+            return delays;
         } catch (Exception e) {
             e.printStackTrace();
-            return "Error " + e.getMessage();
+            return new RoadState(Collections.singletonList("Error " + e.getMessage()), null);
         }
     }
 
-    static List<String> parseData(InputStream stream) throws XmlPullParserException, IOException {
+    static RoadState parseData(InputStream stream) throws XmlPullParserException, IOException {
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
         factory.setNamespaceAware(true);
         XmlPullParser xpp = factory.newPullParser();
@@ -47,11 +44,21 @@ public class RodosService {
         xpp.setInput(new InputStreamReader(stream));
         int eventType = xpp.getEventType();
         List<String> delays = new ArrayList<>();
+        List<String> colors = new ArrayList<>();
         while (eventType != XmlPullParser.END_DOCUMENT) {
             if (eventType == XmlPullParser.START_TAG) {
                 String name = xpp.getName();
                 if ("defs".equals(name)) {
                     skip(xpp);
+                }
+                if ("rect".equals(name)) {
+                    String id = xpp.getAttributeValue(null, "id");
+                    if (id != null && id.startsWith("SegmentViewMerge")) {
+                        String style = xpp.getAttributeValue(null, "style");
+                        if (style != null && style.startsWith("fill:#")) {
+                            colors.add(style.substring(6, 12));
+                        }
+                    }
                 }
             } else if (eventType == XmlPullParser.TEXT) {
                 String text = xpp.getText();
@@ -62,13 +69,13 @@ public class RodosService {
             }
             eventType = xpp.next();
         }
-        return delays;
+        return new RoadState(delays, colors);
     }
 
-    private static List<String> downloadUrl(URL url) throws IOException {
+    private static RoadState downloadUrl(URL url) throws IOException {
         InputStream stream = null;
         HttpURLConnection connection = null;
-        List<String> delays = null;
+        RoadState delays = null;
         try {
             connection = (HttpURLConnection) url.openConnection();
             connection.setReadTimeout(TIMEOUT);

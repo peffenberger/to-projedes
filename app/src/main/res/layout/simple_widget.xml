@@ -17,16 +17,39 @@
         android:textColor="@android:color/white"
         android:textSize="@dimen/abc_text_size_small_material"
         android:textStyle="bold"/>
-    <TextView
-        android:id="@+id/textView"
+
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight=".65"
-        android:gravity="center"
-        android:textColor="@android:color/white"
-        android:text="@string/default_text"
-        android:textSize="@dimen/abc_text_size_small_material"
-        android:textStyle="bold"/>
+        android:padding="@dimen/widget_margin"
+        android:background="#55000000">
+
+        <ImageView
+            android:id="@+id/imageViewTop"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.2"
+            android:gravity="center" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.6"
+            android:gravity="center"
+            android:text="@string/default_text"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/abc_text_size_small_material"
+            android:textStyle="bold" />
+        <ImageView
+            android:id="@+id/imageViewBottom"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.2"
+            android:gravity="center" />
+    </LinearLayout>
+
     <Button
         android:id="@+id/actionButton"
         android:layout_width="0dp"
